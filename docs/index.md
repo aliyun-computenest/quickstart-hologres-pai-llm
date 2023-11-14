@@ -13,9 +13,7 @@ LangChain是一个开源框架，可以将大模型、向量数据库、定制�
 
 ## 创建服务实例
 
-1. 进入[正式创建](https://computenest.console.aliyun.com/service/market/cn-hangzhou)，选择“Hologres+PAI一键部署企业级问答知识库”，点击**正式创建**
-
-    <img src="1.png" width="1000" align="bottom"/>
+1. 点击创建[Hologres+PAI 5分钟一键部署企业级问答知识库](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-1dfaa4725aa14cfc8f76)服务实例。
 
 2. 在**创建服务实例**页，配置以下字段
 
