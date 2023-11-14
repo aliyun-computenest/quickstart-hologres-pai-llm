@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>Hologres+PAI一键部署企业级问答知识库 - Aliyun 计算巢 x quickstart-hologres-pai-llm</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#hologrespai">Hologres+PAI一键部署企业级问答知识库</a></li>
+              
+                  <li><a href="#_1">背景信息</a></li>
+                  
+              
+                  <li><a href="#_2">前提条件</a></li>
+                  
+              
+                  <li><a href="#_3">创建服务实例</a></li>
+                  
+              
+                  <li><a href="#_4">知识库使用</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="hologrespai">Hologres+PAI一键部署企业级问答知识库</h1>
+<h2 id="_1">背景信息</h2>
+<p>Hologres是阿里巴巴自研一站式实时数仓产品，不仅支持海量数据多维分析（OLAP）、高并发低延迟的在线数据服务（Serving），还与达摩院自研高性能向量计算软件库Proxima深度整合，支持高性能、低延时、简单易用的向量计算能力。详情请参见<a href="https://help.aliyun.com/zh/hologres/user-guide/vector-processing-based-on-proxima">Proxima向量计算</a>。
+PAI-EAS是阿里云的模型在线服务平台，支持用户将模型一键部署为在线推理服务或AI-Web应用，可以一键部署LLM推理、AIGC等热门服务应用。PAI-EAS
+适用于实时推理、近实时异步推理等多种AI推理场景，具备Serverless自动扩缩容和完整运维监控体系能力。
+LangChain是一个开源框架，可以将大模型、向量数据库、定制语料结合，高效完成专属问答知识库的搭建。Hologres现已被LangChain作为向量数据库集成，详情请参见<a href="https://python.langchain.com/docs/integrations/vectorstores/hologres">LangChain-Hologres</a>。
+计算巢服务是一个开放给服务商和用户的服务管理PaaS平台，为服务商和用户提供了高效、便捷、安全的服务使用体验，服务商能更好地在阿里云上部署、交付和管理服务，用户能集中管理在阿里云上订阅的各类服务商提供的服务。通过计算巢，可以一键完成问答知识库所需的硬件资源拉起与软件资源部署。</p>
+<h2 id="_2">前提条件</h2>
+<p>如果您使用RAM用户进行知识库搭建，需要通过主账号授予相应资源权限，需要的权限及授权方式请参见<a href="https://help.aliyun.com/zh/compute-nest/user-guide/grant-user-permissions-to-a-ram-user">为RAM用户（子账号）授权</a>。</p>
+<h2 id="_3">创建服务实例</h2>
+<ol>
+<li>
+<p>点击创建<a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&amp;ServiceId=service-1dfaa4725aa14cfc8f76">Hologres+PAI 5分钟一键部署企业级问答知识库</a>服务实例。</p>
+</li>
+<li>
+<p>在<strong>创建服务实例</strong>页，配置以下字段</p>
+<table>
+<thead>
+<tr>
+<th><strong>模块</strong></th>
+<th><strong>参数</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务实例名称</td>
+<td></td>
+<td>计算巢服务实例名称</td>
+</tr>
+<tr>
+<td>地域</td>
+<td></td>
+<td>Hologres、PAI-EAS、ECS实例所在地域</td>
+</tr>
+<tr>
+<td>付费类型配置</td>
+<td>付费类型</td>
+<td>ECS和Hologres的计费方式，支持按量付费或包年包月PAI-EAS实例只支持按量付费</td>
+</tr>
+<tr>
+<td>ECS实例配置</td>
+<td>实例类型</td>
+<td>ECS实例规格</td>
+</tr>
+<tr>
+<td></td>
+<td>实例密码</td>
+<td>ECS实例登录密码</td>
+</tr>
+<tr>
+<td>Hologres实例配置</td>
+<td>实例规格</td>
+<td>Hologres计算资源规格Hologres存储资源默认为按量付费，推荐您根据业务数据量，购买合适的<a href="https://help.aliyun.com/zh/hologres/product-overview/storage-deduction-package">存储抵扣包</a></td>
+</tr>
+<tr>
+<td>PAI-EAS模型配置</td>
+<td>选择大模型</td>
+<td>您希望部署的LLM大模型</td>
+</tr>
+<tr>
+<td></td>
+<td>PAI实例规格</td>
+<td>PAI-EAS实例规格</td>
+</tr>
+<tr>
+<td>VPC配置</td>
+<td>交换机可用区</td>
+<td>交换机所在可用区</td>
+</tr>
+<tr>
+<td></td>
+<td>是否新建VPC</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>专有网络</td>
+<td>专有网络VPC实例ID或专有网络IPv4网段</td>
+</tr>
+<tr>
+<td></td>
+<td>交换机</td>
+<td>交换机实例ID或交换机子网网段</td>
+</tr>
+<tr>
+<td>标签和资源组</td>
+<td>标签</td>
+<td>服务实例需要绑定的标签</td>
+</tr>
+<tr>
+<td></td>
+<td>资源组</td>
+<td>服务实例所属的资源组</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>点击<strong>下一步：确认订单</strong></p>
+</li>
+<li>查看订单页，确保<strong>依赖检查</strong>全部正常，点击<strong>立即创建</strong></li>
+<li>创建“Hologres+PAI一键部署企业级问答知识库”服务实例需耗时5-10分钟，您可以在<strong>服务实例管理</strong>中查看实例情况</li>
+</ol>
+<h2 id="_4">知识库使用</h2>
+<ol>
+<li>进入计算巢<a href="https://computenest.console.aliyun.com/service/instance">服务实例管理</a>页，点击已部署的服务实例ID，进入<strong>服务实例详情</strong>页</li>
+<li>
+<p>点击<strong>实例信息</strong>中的<strong>Endpoint</strong>链接，进入Hologres+大模型<strong>WebUI</strong></p>
+<p><img src="2.png" width="1000" align="bottom"/></p>
+</li>
+<li>
+<p>在WebUI的<strong>设置</strong>页配置以下信息</p>
+<ol>
+<li>Embedding模型：默认选择text2vec-base-chinese模型</li>
+<li>PAI-EAS连接信息：已默认填写计算巢部署的PAI-EAS模型的VPC连接信息</li>
+<li>Hologres连接信息：<ol>
+<li>已默认填写计算巢部署的Hologres实例的VPC Host、Port、Database（chatbot）</li>
+<li>需要您在User和Password中填入您的阿里云AccessKey ID和AccessKey
+   Secret，可以在阿里云官网<a href="https://usercenter.console.aliyun.com/?spm=a2c8b.12215442.nav-right.dak.18fb6253I8gJRw#/manage/ak">Access Key管理</a>
+   查看。您也可以在Hologres中创建其他账号用于知识库搭建，详情请参见<a href="https://help.aliyun.com/zh/hologres/user-guide/overview">Hologres权限模型概述</a><img src="3.png" width="1000" align="bottom"/></li>
+<li>点击<strong>连接Hologres</strong>，收到“连接 Hologres 成功”提示，即说明连接成功<img src="4.png" width="1000" align="bottom"/></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>在WebUI的<strong>上传</strong>页</p>
+<ol>
+<li>上传您的专属语料数据。后台会对您的语料数据进行向量化处理并导入Hologres<img src="5.png" width="1000" align="bottom"/></li>
+<li>收到“成功上传 x 个文件”提示，即说明数据处理完成<img src="6.png" width="1000" align="bottom"/></li>
+<li>您可以在Hologres实例chatbot数据库下的langchain_demo表中查询您的语料数据</li>
+</ol>
+</li>
+<li>
+<p>在WebUI的<strong>聊天</strong>页</p>
+<ol>
+<li>选择聊天模式：</li>
+<li>向量数据库：对您的提问，仅使用Hologres进行向量近似查询，返回top K结果</li>
+<li>大语言模型：对您的提问，仅使用大模型直接进行回答</li>
+<li>向量数据库+大语言模型：对您的提问，使用您已在Hologres中存储的语料数据进行向量近似查询，将结果对大模型进行提示词微调，最终使用大模型推理求解进行回答<img src="7.png" width="1000" align="bottom"/></li>
+</ol>
+</li>
+<li>选择最相关的k条语料：默认为3条</li>
+<li>选择prompt模版：建议选择通用模版，您也可以自定义prompt模版</li>
+<li>在提问框中输入您的问题，点击<strong>提交</strong>进行问答 <img src="8.png" width="1000" align="bottom"/></li>
+</ol>
+<p>至此，您已完成企业级问答知识库的调试。
+您可以进一步使用PAI-EAS部署的大模型的调用信息（在<a href="https://pai.console.aliyun.com/">PAI控制台</a>-EAS实例详情页中查看），将知识库接入实际业务场景进行使用，如接入钉钉聊天群聊（参见<a href="https://help.aliyun.com/zh/hologres/use-cases/use-hologres-to-customize-chatgpt-exclusive-chatbot-for-free">使用Hologres和大模型免费定制专属聊天机器人</a>）等。</p>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.5.3
+  Docs Build Date UTC : 2023-11-14 04:02:58.129304+00:00
+  -->
+</body>
+</html>
